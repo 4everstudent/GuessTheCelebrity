@@ -3,13 +3,14 @@ package a4everstudent.guessthecelebrity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.concurrent.ExecutionException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -59,7 +60,17 @@ public class MainActivity extends AppCompatActivity {
         try {
             result = task.execute("http://www.posh24.com/celebrities").get();
 
-            Log.i("Contents of URL:", result);
+            //split the page so we don't get the images from the sideBar
+            String[] splitResult = result.split("<div class=\"sidebarContainer\">");
+
+
+            Pattern p = Pattern.compile("alt=\"(.*?)\"");
+            Matcher m = p.matcher(splitResult[0]);
+
+            while(m.find()){
+                System.out.println(m.group(1));
+            }
+
 
         } catch (InterruptedException e) {
 
