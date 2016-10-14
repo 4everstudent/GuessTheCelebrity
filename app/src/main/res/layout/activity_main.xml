@@ -20,7 +20,7 @@
             android:layout_column="0"
             android:layout_row="3"
             android:onClick="checkAnswer"
-            android:tag="3"
+            android:tag="2"
             android:text="Guess 3" />
 
         <Button
@@ -30,7 +30,7 @@
             android:layout_column="0"
             android:layout_row="4"
             android:onClick="checkAnswer"
-            android:tag="4"
+            android:tag="3"
             android:text="Guess 4" />
 
         <Button
@@ -40,7 +40,7 @@
             android:layout_column="0"
             android:layout_row="1"
             android:onClick="checkAnswer"
-            android:tag="1"
+            android:tag="0"
             android:text="Guess 1" />
 
         <ImageView
@@ -59,7 +59,7 @@
             android:layout_column="0"
             android:layout_row="2"
             android:onClick="checkAnswer"
-            android:tag="3"
+            android:tag="2"
             android:text="Guess 2" />
 
     </GridLayout>

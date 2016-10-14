@@ -5,8 +5,10 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,6 +32,15 @@ public class MainActivity extends AppCompatActivity {
 
     ImageView imageView;
     Button button1, button2, button3, button4;
+
+    public void checkAnswer(View view){
+        if(view.getTag().toString().equals(Integer.toString(locationOfCorrectAnswer))){
+            Toast.makeText(getApplicationContext(), "Correct!", Toast.LENGTH_LONG).show();
+        }
+        else{
+            Toast.makeText(getApplicationContext(), "Wrong! It was "+celebNames.get(chosenCeleb), Toast.LENGTH_LONG).show();
+        }
+    }
 
     public class ImageDownloader extends AsyncTask<String, Void, Bitmap> {
 
