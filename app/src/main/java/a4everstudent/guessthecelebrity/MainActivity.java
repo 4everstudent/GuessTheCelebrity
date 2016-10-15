@@ -31,15 +31,19 @@ public class MainActivity extends AppCompatActivity {
     String[] answers = new String[4];
 
     ImageView imageView;
-    Button button1, button2, button3, button4;
+    Button button0, button1, button2, button3;
+    Bitmap celebImage;
 
     public void checkAnswer(View view){
         if(view.getTag().toString().equals(Integer.toString(locationOfCorrectAnswer))){
-            Toast.makeText(getApplicationContext(), "Correct!", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Correct!", Toast.LENGTH_SHORT).show();
         }
         else{
-            Toast.makeText(getApplicationContext(), "Wrong! It was "+celebNames.get(chosenCeleb), Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Wrong! It was "+celebNames.get(chosenCeleb), Toast.LENGTH_SHORT).show();
         }
+
+        createNewQuestion();
+
     }
 
     public class ImageDownloader extends AsyncTask<String, Void, Bitmap> {
@@ -107,6 +111,52 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void createNewQuestion(){
+        Random random = new Random();
+        chosenCeleb = random.nextInt(celebURLs.size());
+
+        ImageDownloader imageTask = new ImageDownloader();
+
+        try {
+
+            celebImage = imageTask.execute(celebURLs.get(chosenCeleb)).get();
+            imageView.setImageBitmap(celebImage);
+
+            locationOfCorrectAnswer = random.nextInt(4);
+
+            int incorrectAnswerLocation;
+
+            for (int i = 0; i < 4; i++) {
+
+                if (i == locationOfCorrectAnswer) {
+                    answers[i] = celebNames.get(chosenCeleb);
+                } else {
+                    incorrectAnswerLocation = random.nextInt(celebURLs.size());
+
+                    while (incorrectAnswerLocation == chosenCeleb) {
+                        incorrectAnswerLocation = random.nextInt(celebURLs.size());
+                    }
+                    answers[i] = celebNames.get(incorrectAnswerLocation);
+                }
+            }
+
+        }
+
+        catch (Exception e) {
+
+            e.printStackTrace();
+        }
+
+
+        button0.setText(answers[0]);
+        button1.setText(answers[1]);
+        button2.setText(answers[2]);
+        button3.setText(answers[3]);
+
+
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -114,10 +164,10 @@ public class MainActivity extends AppCompatActivity {
 
         imageView = (ImageView) findViewById(R.id.imageView);
 
+        button0 = (Button) findViewById(R.id.guessButton0);
         button1 = (Button) findViewById(R.id.guessButton1);
         button2 = (Button) findViewById(R.id.guessButton2);
         button3 = (Button) findViewById(R.id.guessButton3);
-        button4 = (Button) findViewById(R.id.guessButton4);
 
         DownloadTask task = new DownloadTask();
         String result;
@@ -142,40 +192,6 @@ public class MainActivity extends AppCompatActivity {
                 celebNames.add(m.group(1));
             }
 
-            Random random = new Random();
-            chosenCeleb = random.nextInt(celebURLs.size());
-
-            ImageDownloader imageTask = new ImageDownloader();
-
-            Bitmap celebImage;
-
-            celebImage = imageTask.execute(celebURLs.get(chosenCeleb)).get();
-
-            imageView.setImageBitmap(celebImage);
-
-            locationOfCorrectAnswer = random.nextInt(4);
-
-            int incorrectAnswerLocation;
-
-            for (int i = 0; i < 4; i++) {
-
-                if (i == locationOfCorrectAnswer) {
-                    answers[i] = celebNames.get(chosenCeleb);
-                } else {
-                    incorrectAnswerLocation = random.nextInt(celebURLs.size());
-
-                    while (incorrectAnswerLocation == chosenCeleb) {
-                        incorrectAnswerLocation = random.nextInt(celebURLs.size());
-                    }
-                    answers[i] = celebNames.get(incorrectAnswerLocation);
-                }
-            }
-
-            button1.setText(answers[0]);
-            button2.setText(answers[1]);
-            button3.setText(answers[2]);
-            button4.setText(answers[3]);
-
 
         } catch (InterruptedException e) {
 
@@ -184,6 +200,8 @@ public class MainActivity extends AppCompatActivity {
 
             e.printStackTrace();
         }
+
+        createNewQuestion();
 
     }
 }
